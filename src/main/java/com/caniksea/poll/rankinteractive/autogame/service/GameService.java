@@ -16,10 +16,13 @@ import com.caniksea.poll.rankinteractive.autogame.repository.transaction.Transac
 import com.caniksea.poll.rankinteractive.autogame.repository.user.PlayerAccountRepository;
 import com.caniksea.poll.rankinteractive.autogame.repository.user.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class GameService {
@@ -35,6 +38,12 @@ public class GameService {
     private TransactionTypeRepository transactionTypeRepository;
     private TransactionRepository transactionRepository;
     private APIKeyRepository apiKeyRepository;
+
+    private Optional<Transaction> buildRecord(Transaction transaction, List<TransactionType> transactionTypes) {
+        return transactionTypes.stream()
+                .filter(tt -> tt.getId().equalsIgnoreCase(transaction.getTransactionTypeId()))
+                .findFirst().map(d -> this.transactionFactory.addTransactionTypeLiteral(transaction, d));
+    }
 
     @Autowired public GameService(APIKeyFactory apiKeyFactory, PasswordHelper passwordHelper,
                                   PlayerRepository playerRepository,
@@ -66,9 +75,9 @@ public class GameService {
 
     public Transaction saveTransaction(TransactionRequest transactionRequest, String operation) {
         TransactionType transactionType = this.transactionTypeRepository.findByName(operation)
-                .orElseThrow(() -> new RuntimeException("Transaction type NOT found!"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Transaction type NOT found!"));
         Transaction transaction = this.transactionFactory.build(transactionType.getId(), transactionRequest)
-                .orElseThrow(() -> new RuntimeException("Could not create transaction!"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Could not create transaction!"));
         return this.transactionRepository.save(transaction);
     }
 
@@ -82,19 +91,23 @@ public class GameService {
     }
 
     public List<Transaction> getLastTenTransactionsForPlayer(String playerId) {
-        return this.transactionRepository.findTop10ByPlayerIdOrderByDateTimeDesc(playerId);
+        List<TransactionType> transactionTypes = this.transactionTypeRepository.findAll();
+        List<Transaction> transactions = this.transactionRepository.findTop10ByPlayerIdOrderByDateTimeDesc(playerId);
+        transactions = transactions.stream().map(t -> buildRecord(t, transactionTypes))
+                .flatMap(Optional::stream).collect(Collectors.toList());
+        return transactions;
     }
 
     public String setup(String secret) {
         APIKey apiKey = this.apiKeyFactory.build(APIConstant.KEY_CS_SUPPORT.value, secret)
-                .orElseThrow(() -> new RuntimeException("Key build unsuccessful!"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Key build unsuccessful!"));
         apiKey = this.apiKeyRepository.save(apiKey);
         return apiKey.getKeyType();
     }
 
     public boolean verifyPassword(String password) {
         APIKey apiKey = this.apiKeyRepository.findById(APIConstant.KEY_CS_SUPPORT.value)
-                .orElseThrow(() -> new RuntimeException("Key NOT found!"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Key NOT found!"));
         return this.passwordHelper.passwordEncoder().matches(password, apiKey.getValue());
     }
 }

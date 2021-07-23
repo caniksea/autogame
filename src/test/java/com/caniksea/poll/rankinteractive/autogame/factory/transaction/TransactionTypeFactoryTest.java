@@ -18,17 +18,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @Import(TestConfig.class)
 class TransactionTypeFactoryTest {
 
-    @Autowired private StringHelper stringHelper;
-    private TransactionTypeFactory transactionTypeFactory;
-
-    @BeforeEach void setup() {
-        this.transactionTypeFactory = new TransactionTypeFactory(this.stringHelper);
-    }
+    @Autowired private TransactionTypeFactory transactionTypeFactory;
 
     @Test
     void build() {
         Optional<TransactionType> result = this.transactionTypeFactory.build("Waging");
-        System.out.println(result);
         assertAll( "Transaction type created",
                 () -> assertTrue(result.isPresent()),
                 () -> assertNotNull(result.get().getId())

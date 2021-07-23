@@ -1,6 +1,5 @@
 package com.caniksea.poll.rankinteractive.autogame.config;
 
-import com.caniksea.poll.rankinteractive.autogame.entity.user.PlayerAccount;
 import com.caniksea.poll.rankinteractive.autogame.factory.transaction.APIKeyFactory;
 import com.caniksea.poll.rankinteractive.autogame.factory.transaction.TransactionFactory;
 import com.caniksea.poll.rankinteractive.autogame.factory.transaction.TransactionTypeFactory;
@@ -26,9 +25,9 @@ public class TestConfig {
         return new TransactionFactory(stringHelperTest());
     }
 
-    @Bean public APIKeyFactory apiKeyFactoryTest() {
-        return new APIKeyFactory(stringHelperTest(), passwordHelperTest());
-    }
+//    @Bean public APIKeyFactory apiKeyFactoryTest() {
+//        return new APIKeyFactory(stringHelperTest(), passwordHelperTest());
+//    }
 
     @Bean public PlayerFactory playerFactoryTest() {
         return new PlayerFactory(stringHelperTest());

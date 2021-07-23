@@ -21,20 +21,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @Import(TestConfig.class)
 class TransactionFactoryTest {
 
-    @Autowired private StringHelper stringHelper;
     private TransactionRequest transactionRequest;
-    private TransactionFactory factory;
+    @Autowired private TransactionFactory factory;
 
     @BeforeEach void setup() {
         this.transactionRequest = new TransactionRequest("01", "01", BigDecimal.TEN);
-        this.factory = new TransactionFactory(this.stringHelper);
-        System.out.println(new BCryptPasswordEncoder().encode("swordfish"));
     }
 
     @Test
     void build() {
         Optional<Transaction> transaction = this.factory.build("2", this.transactionRequest);
-        System.out.println(transaction);
         assertNotNull(transaction.get());
     }
 }

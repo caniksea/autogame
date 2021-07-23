@@ -4,6 +4,7 @@ import com.caniksea.poll.rankinteractive.autogame.entity.transaction.APIKey;
 import com.caniksea.poll.rankinteractive.autogame.helper.PasswordHelper;
 import com.caniksea.poll.rankinteractive.autogame.helper.StringHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

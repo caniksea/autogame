@@ -25,13 +25,12 @@ class APIKeyFactoryTest {
     private APIKeyFactory factory;
 
     @BeforeEach void setup() {
-        this.factory = new APIKeyFactory(this.stringHelper, this.passwordHelper);
+        this.factory = new APIKeyFactory(stringHelper, passwordHelper);
     }
 
     @Test
     void build() {
         Optional<APIKey> apiKey = this.factory.build(APIConstant.KEY_CS_SUPPORT.value, "swordfish");
-        System.out.println(apiKey);
         assertAll(
                 () -> assertTrue(apiKey.isPresent()),
                 () -> assertNotSame("swordfish", apiKey.get().getValue())

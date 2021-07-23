@@ -2,6 +2,7 @@ package com.caniksea.poll.rankinteractive.autogame.factory.transaction;
 
 import com.caniksea.poll.rankinteractive.autogame.entity.request.TransactionRequest;
 import com.caniksea.poll.rankinteractive.autogame.entity.transaction.Transaction;
+import com.caniksea.poll.rankinteractive.autogame.entity.transaction.TransactionType;
 import com.caniksea.poll.rankinteractive.autogame.helper.StringHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,5 +29,10 @@ public class TransactionFactory {
                     .transactionAmount(transactionRequest.amount())
                     .dateTime(LocalDateTime.now()).build();
         return Optional.ofNullable(transaction);
+    }
+
+    public Transaction addTransactionTypeLiteral(Transaction transaction, TransactionType transactionType) {
+        return transaction.toBuilder().transactionType(transactionType.getName())
+                .build();
     }
 }

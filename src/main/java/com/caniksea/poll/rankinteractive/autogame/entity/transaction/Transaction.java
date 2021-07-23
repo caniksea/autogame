@@ -8,13 +8,14 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@ToString @Getter @Builder @Entity
+@ToString @Getter @Builder(toBuilder = true) @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @IdClass(Transaction.TransactionIdentifier.class)
 public class Transaction {
     @Id private String playerId, transactionId;
     private String transactionTypeId;
+    @Transient private String transactionType;
     private BigDecimal transactionAmount;
     private LocalDateTime dateTime;
 

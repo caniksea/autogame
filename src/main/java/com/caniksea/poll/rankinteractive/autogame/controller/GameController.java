@@ -43,8 +43,8 @@ public class GameController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Player account NOT found!"));
         if (playerAccount.getBalance().compareTo(transactionRequest.amount()) < 0)
             throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT, "Insufficient fund");
-        this.gameService.findTransactionById(transactionRequest)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT, "Transaction already exist!"));
+        if (this.gameService.findTransactionById(transactionRequest).isPresent())
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Transaction already exist!");
         BigDecimal balance = playerAccount.getBalance().subtract(transactionRequest.amount());
         this.gameService.saveTransaction(transactionRequest, APIConstant.OP_WITHDRAW.value);
         playerAccount = playerAccount.toBuilder().balance(balance).build();
@@ -58,8 +58,8 @@ public class GameController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Player NOT found!"));
         PlayerAccount playerAccount = this.gameService.findPlayerAccountById(transactionRequest.playerId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Player account NOT found!"));
-        this.gameService.findTransactionById(transactionRequest)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT, "Transaction already exist!"));
+        if (this.gameService.findTransactionById(transactionRequest).isPresent())
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Transaction already exist!");
         BigDecimal balance = playerAccount.getBalance().add(transactionRequest.amount());
         this.gameService.saveTransaction(transactionRequest, APIConstant.OP_DEPOSIT.value);
         playerAccount = playerAccount.toBuilder().balance(balance).build();
@@ -68,7 +68,7 @@ public class GameController {
     }
 
     @PostMapping("player-history")
-    public ResponseEntity win(@RequestBody TransactionHistoryRequest historyRequest) {
+    public ResponseEntity lastTenTransactions(@RequestBody TransactionHistoryRequest historyRequest) {
         Player player = this.gameService.findPlayerByUsername(historyRequest.playerUsername())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Player username NOT found!"));
         boolean isMatch = this.gameService.verifyPassword(historyRequest.password());
