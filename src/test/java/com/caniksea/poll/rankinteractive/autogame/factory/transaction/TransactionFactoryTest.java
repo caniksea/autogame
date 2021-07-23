@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
@@ -27,6 +28,7 @@ class TransactionFactoryTest {
     @BeforeEach void setup() {
         this.transactionRequest = new TransactionRequest("01", "01", BigDecimal.TEN);
         this.factory = new TransactionFactory(this.stringHelper);
+        System.out.println(new BCryptPasswordEncoder().encode("swordfish"));
     }
 
     @Test

@@ -6,6 +6,7 @@ import com.caniksea.poll.rankinteractive.autogame.helper.StringHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Component
@@ -24,7 +25,8 @@ public class TransactionFactory {
                     .transactionId(transactionRequest.transactionId())
                     .playerId(transactionRequest.playerId())
                     .transactionTypeId(transactionTypeId)
-                    .transactionAmount(transactionRequest.amount()).build();
+                    .transactionAmount(transactionRequest.amount())
+                    .dateTime(LocalDateTime.now()).build();
         return Optional.ofNullable(transaction);
     }
 }
