@@ -40,7 +40,7 @@ class GameControllerTest {
     @Test
     void wager() {
         String url = this.baseURL + "withdraw";
-        TransactionRequest transactionRequest = new TransactionRequest(this.stringHelper.generateId(), "001", BigDecimal.TEN, null);
+        TransactionRequest transactionRequest = new TransactionRequest(this.stringHelper.generateId(), "002", BigDecimal.TEN, "paper");
         ResponseEntity responseEntity = this.restTemplate.postForEntity(url, transactionRequest, String.class);
         System.out.println(responseEntity.getBody());
         assertNotNull(responseEntity.getBody());

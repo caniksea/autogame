@@ -122,7 +122,7 @@ public class GameService {
      */
     public Transaction saveTransaction(TransactionRequest transactionRequest, String operation) {
         TransactionType transactionType = this.transactionTypeRepository.findByNameIgnoreCase(operation)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Transaction type NOT found!"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Transaction type NOT found!"));
         Transaction transaction = this.transactionFactory.build(transactionType.getId(), transactionRequest)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Could not create transaction!"));
         return this.transactionRepository.save(transaction);
