@@ -1,3 +1,8 @@
 package com.caniksea.poll.rankinteractive.autogame.entity.request;
 
-public record TransactionHistoryRequest(String playerUsername, String password) {}
+import lombok.Value;
+
+@Value
+public class TransactionHistoryRequest {
+    private String playerUsername, password;
+}

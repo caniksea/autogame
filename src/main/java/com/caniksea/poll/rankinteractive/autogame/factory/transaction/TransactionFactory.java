@@ -23,10 +23,10 @@ public class TransactionFactory {
         Transaction transaction = null;
         if (!this.stringHelper.isEmptyOrNull(transactionTypeId))
             transaction = Transaction.builder()
-                    .transactionId(transactionRequest.transactionId())
-                    .playerId(transactionRequest.playerId())
+                    .transactionId(transactionRequest.getTransactionId())
+                    .playerId(transactionRequest.getPlayerId())
                     .transactionTypeId(transactionTypeId)
-                    .transactionAmount(transactionRequest.amount())
+                    .transactionAmount(transactionRequest.getAmount())
                     .dateTime(LocalDateTime.now()).build();
         return Optional.ofNullable(transaction);
     }

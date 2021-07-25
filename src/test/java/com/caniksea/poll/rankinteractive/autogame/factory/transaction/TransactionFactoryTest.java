@@ -25,12 +25,13 @@ class TransactionFactoryTest {
     @Autowired private TransactionFactory factory;
 
     @BeforeEach void setup() {
-        this.transactionRequest = new TransactionRequest("01", "01", BigDecimal.TEN);
+        this.transactionRequest = new TransactionRequest("01", "01", BigDecimal.TEN, null);
     }
 
     @Test
     void build() {
         Optional<Transaction> transaction = this.factory.build("2", this.transactionRequest);
+        System.out.println(transaction);
         assertNotNull(transaction.get());
     }
 }

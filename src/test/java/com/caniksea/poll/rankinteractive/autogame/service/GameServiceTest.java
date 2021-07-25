@@ -75,7 +75,7 @@ class GameServiceTest {
     void findPlayerByUsername() {
         Player entity = this.playerFactory.build("test", "hello", "there")
                 .orElseThrow(NoSuchElementException::new);
-        Mockito.when(this.playerRepository.findByUsername("test")).thenReturn(Optional.of(entity));
+        Mockito.when(this.playerRepository.findByUsernameIgnoreCase("test")).thenReturn(Optional.of(entity));
         Player player = this.service.findPlayerByUsername(entity.getUsername())
                 .orElseThrow(NoSuchElementException::new);
         assertAll(

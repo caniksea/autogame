@@ -1,4 +1,4 @@
-package com.caniksea.poll.rankinteractive.autogame.entity;
+package com.caniksea.poll.rankinteractive.autogame.entity.misc;
 
 public enum APIConstant {
 

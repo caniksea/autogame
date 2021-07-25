@@ -1,6 +1,12 @@
 package com.caniksea.poll.rankinteractive.autogame.entity.request;
 
-import java.io.Serializable;
+import lombok.Value;
+
 import java.math.BigDecimal;
 
-public record TransactionRequest(String transactionId, String playerId, BigDecimal amount) implements Serializable {}
+@Value
+public class TransactionRequest {
+    private String transactionId, playerId;
+    private BigDecimal amount;
+    private String promoCode;
+}

@@ -1,7 +1,7 @@
 package com.caniksea.poll.rankinteractive.autogame.factory.transaction;
 
 import com.caniksea.poll.rankinteractive.autogame.config.TestConfig;
-import com.caniksea.poll.rankinteractive.autogame.entity.APIConstant;
+import com.caniksea.poll.rankinteractive.autogame.entity.misc.APIConstant;
 import com.caniksea.poll.rankinteractive.autogame.entity.transaction.APIKey;
 import com.caniksea.poll.rankinteractive.autogame.helper.PasswordHelper;
 import com.caniksea.poll.rankinteractive.autogame.helper.StringHelper;

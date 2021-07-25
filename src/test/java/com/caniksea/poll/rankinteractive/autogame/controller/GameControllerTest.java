@@ -1,7 +1,9 @@
 package com.caniksea.poll.rankinteractive.autogame.controller;
 
+import com.caniksea.poll.rankinteractive.autogame.entity.request.TransactionHistoryRequest;
 import com.caniksea.poll.rankinteractive.autogame.entity.request.TransactionRequest;
 import com.caniksea.poll.rankinteractive.autogame.entity.user.PlayerAccount;
+import com.caniksea.poll.rankinteractive.autogame.helper.StringHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class GameControllerTest {
 
     @Autowired private TestRestTemplate restTemplate;
+    @Autowired private StringHelper stringHelper;
     @LocalServerPort private int port;
     private String baseURL;
 
@@ -37,7 +40,7 @@ class GameControllerTest {
     @Test
     void wager() {
         String url = this.baseURL + "withdraw";
-        Object transactionRequest = new TransactionRequest("001", "001", BigDecimal.TEN);
+        TransactionRequest transactionRequest = new TransactionRequest(this.stringHelper.generateId(), "001", BigDecimal.TEN, null);
         ResponseEntity responseEntity = this.restTemplate.postForEntity(url, transactionRequest, String.class);
         System.out.println(responseEntity.getBody());
         assertNotNull(responseEntity.getBody());
@@ -46,13 +49,21 @@ class GameControllerTest {
 
     @Test
     void win() {
+        String url = this.baseURL + "deposit";
+        TransactionRequest transactionRequest = new TransactionRequest(this.stringHelper.generateId(), "001", BigDecimal.TEN, null);
+        ResponseEntity responseEntity = this.restTemplate.postForEntity(url, transactionRequest, String.class);
+        System.out.println(responseEntity.getBody());
+        assertNotNull(responseEntity.getBody());
+        assertTrue(responseEntity.getStatusCode().is2xxSuccessful());
     }
 
     @Test
     void lastTenTransactions() {
-    }
-
-    @Test
-    void setUp() {
+        String url = this.baseURL + "player-history";
+        TransactionHistoryRequest historyRequest = new TransactionHistoryRequest("test-gamer", "swordfish");
+        ResponseEntity responseEntity = this.restTemplate.postForEntity(url, historyRequest, String.class);
+        System.out.println(responseEntity.getBody());
+        assertNotNull(responseEntity.getBody());
+        assertTrue(responseEntity.getStatusCode().is2xxSuccessful());
     }
 }
